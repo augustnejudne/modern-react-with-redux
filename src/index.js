@@ -1,15 +1,40 @@
-import React from 'react';
+// ****************************************************************************
+// *                              by Kim Nejudne                              *
+// *                         started on March 24, 2018                        *
+// ****************************************************************************
+
+// NPM imports
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import YTSearch from 'youtube-api-search';
 
-import App from './components/app';
-import reducers from './reducers';
+// Component imports
+import SearchBar from './components/search_bar';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+// Variable declarations
+const API_KEY = 'AIzaSyASZ9YEuB9zPuUQ4NkG4k9wuAI50GZrjWY';
 
-ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <App />
-  </Provider>
-  , document.querySelector('.container'));
+// App Component
+class App extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			videos: []
+		}
+
+		YTSearch({key: API_KEY,	term: 'surfboards'}, (videos) => {
+			this.setState({videos})
+		});
+	}
+
+	render() {
+		return (
+			<div>
+				<SearchBar />
+			</div>
+		)
+	}
+}
+
+ReactDOM.render(<App />, document.querySelector('.container'));
